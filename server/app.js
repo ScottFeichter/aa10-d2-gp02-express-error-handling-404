@@ -16,8 +16,12 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   // console.log(err.message);
   // console.log(err.statusCode);
-  res.status(err.statusCode);
-  res.json(err);
+  const status = err.statusCode || 500;
+  res.status(status);
+  res.json({
+    message: err.message,
+    statusCode: status
+  });
 });
 
 const port = 5000;
