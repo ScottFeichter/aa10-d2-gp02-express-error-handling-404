@@ -1,19 +1,24 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('GET / This is the root URL');
+app.get("/", (req, res) => {
+  res.send("GET / This is the root URL");
 });
 
-// catch-all error handler to pre-empt the xprs built in
 app.use((req, res, next) => {
-  const err = new Error;
-  err.message = "Sorry the requested resourc couldn't be found";
-  err.statusCode = "404";
-  console.log(err.message);
-  console.log(err.statusCode);
+  const err = new Error(`Sorry, the requested resource couldn't be found`);
+  err.statusCode = 404;
+  err.message = `2Sorry, the requested resource couldn't be found`;
   next(err);
 });
 
+// catch-all error handler to pre-empt the xprs built in
+app.use((err, req, res, next) => {
+  // console.log(err.message);
+  // console.log(err.statusCode);
+  res.status(err.statusCode);
+  res.json(err);
+});
+
 const port = 5000;
-app.listen(port, () => console.log('Server is listening on port', port));
+app.listen(port, () => console.log("Server is listening on port", port));
